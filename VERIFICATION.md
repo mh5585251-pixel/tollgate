@@ -291,3 +291,203 @@ FOUNDATION CHECKS PASSED; milestone verification scope expands as implemented.
 
 exit=0
 ```
+
+## M4 — 2026-11-20T11:02:21.914Z
+
+### npm run typecheck
+
+```text
+
+> tollgate@0.1.0 typecheck
+> tsc --noEmit
+
+
+exit=0
+```
+
+### npm run lint
+
+```text
+
+> tollgate@0.1.0 lint
+> eslint .
+
+
+C:\Users\mh558\Documents\Codex\2026-11-20\files-mentioned-by-the-user-agents\outputs\tollgate\apps\saas\lib\store.ts
+  24:596  error  'latency' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+✖ 1 problem (1 error, 0 warnings)
+
+
+exit=1
+```
+
+## M4 — 2026-11-20T11:02:49.804Z
+
+### npm run typecheck
+
+```text
+
+> tollgate@0.1.0 typecheck
+> tsc --noEmit
+
+
+exit=0
+```
+
+### npm run lint
+
+```text
+
+> tollgate@0.1.0 lint
+> eslint .
+
+
+exit=0
+```
+
+### npm run test
+
+```text
+
+> tollgate@0.1.0 test
+> vitest run
+
+
+ RUN  v3.2.7 C:/Users/mh558/Documents/Codex/2026-11-20/files-mentioned-by-the-user-agents/outputs/tollgate
+
+ ✓ tests/saas.test.ts (5 tests) 145ms
+ ✓ tests/collector.test.ts (5 tests) 75ms
+ ✓ tests/shared.test.ts (4 tests) 16ms
+ ✓ tests/sim.test.ts (3 tests) 11ms
+
+ Test Files  4 passed (4)
+      Tests  17 passed (17)
+   Start at  16:32:56
+   Duration  2.21s (transform 135ms, setup 0ms, collect 844ms, tests 247ms, environment 1ms, prepare 458ms)
+
+
+exit=0
+```
+
+### npm run verify:all
+
+```text
+
+> tollgate@0.1.0 verify:all
+> tsx scripts/verify-all.ts
+
+
+> tollgate@0.1.0 typecheck
+> tsc --noEmit
+
+
+> tollgate@0.1.0 lint
+> eslint .
+
+
+> tollgate@0.1.0 test
+> vitest run
+
+
+ RUN  v3.2.7 C:/Users/mh558/Documents/Codex/2026-11-20/files-mentioned-by-the-user-agents/outputs/tollgate
+
+ ✓ tests/saas.test.ts (5 tests) 133ms
+ ✓ tests/collector.test.ts (5 tests) 73ms
+ ✓ tests/shared.test.ts (4 tests) 15ms
+ ✓ tests/sim.test.ts (3 tests) 10ms
+
+ Test Files  4 passed (4)
+      Tests  17 passed (17)
+   Start at  16:33:04
+   Duration  2.06s (transform 120ms, setup 0ms, collect 768ms, tests 231ms, environment 0ms, prepare 421ms)
+
+FOUNDATION CHECKS PASSED; milestone verification scope expands as implemented.
+
+exit=0
+```
+
+## M4-final — 2026-11-20T11:03:25.434Z
+
+### npm run typecheck
+
+```text
+
+> tollgate@0.1.0 typecheck
+> tsc --noEmit
+
+
+exit=0
+```
+
+### npm run lint
+
+```text
+
+> tollgate@0.1.0 lint
+> eslint .
+
+
+exit=0
+```
+
+### npm run test
+
+```text
+
+> tollgate@0.1.0 test
+> vitest run
+
+
+ RUN  v3.2.7 C:/Users/mh558/Documents/Codex/2026-11-20/files-mentioned-by-the-user-agents/outputs/tollgate
+
+ ✓ tests/saas.test.ts (5 tests) 144ms
+ ✓ tests/collector.test.ts (5 tests) 74ms
+ ✓ tests/shared.test.ts (4 tests) 15ms
+ ✓ tests/sim.test.ts (3 tests) 11ms
+
+ Test Files  4 passed (4)
+      Tests  17 passed (17)
+   Start at  16:33:32
+   Duration  2.18s (transform 124ms, setup 0ms, collect 826ms, tests 244ms, environment 1ms, prepare 444ms)
+
+
+exit=0
+```
+
+### npm run verify:all
+
+```text
+
+> tollgate@0.1.0 verify:all
+> tsx scripts/verify-all.ts
+
+
+> tollgate@0.1.0 typecheck
+> tsc --noEmit
+
+
+> tollgate@0.1.0 lint
+> eslint .
+
+
+> tollgate@0.1.0 test
+> vitest run
+
+
+ RUN  v3.2.7 C:/Users/mh558/Documents/Codex/2026-11-20/files-mentioned-by-the-user-agents/outputs/tollgate
+
+ ✓ tests/saas.test.ts (5 tests) 138ms
+ ✓ tests/collector.test.ts (5 tests) 74ms
+ ✓ tests/shared.test.ts (4 tests) 15ms
+ ✓ tests/sim.test.ts (3 tests) 10ms
+
+ Test Files  4 passed (4)
+      Tests  17 passed (17)
+   Start at  16:33:40
+   Duration  2.11s (transform 128ms, setup 0ms, collect 798ms, tests 237ms, environment 1ms, prepare 433ms)
+
+FOUNDATION CHECKS PASSED; milestone verification scope expands as implemented.
+
+exit=0
+```

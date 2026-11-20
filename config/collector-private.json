@@ -1,0 +1,8 @@
+{
+  "blr-02": {
+    "tenantSalt": "local-demo-acme-salt"
+  },
+  "fra-01": {
+    "tenantSalt": "local-demo-nordwind-salt"
+  }
+}

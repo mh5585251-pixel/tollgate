@@ -6,7 +6,7 @@ export const root=fileURLToPath(new URL('../../../',import.meta.url));
 export function config<T=any>(name:string):T{return JSON.parse(readFileSync(`${root}/config/${name}.json`,'utf8')) as T;}
 export const thresholds=config('thresholds');
 export const tenants=config<Tenant[]>('tenants');
-export interface Tenant {tenantId:string;name:string;homeRegion:Region;collectorId:string;port:number;sourceTz:string;tenantSalt:string;collectorKey:string;retentionDays:number;allowListVersion:string;thresholdsRef:string}
+export interface Tenant {tenantId:string;name:string;homeRegion:Region;collectorId:string;port:number;sourceTz:string;collectorKey:string;retentionDays:number;allowListVersion:string;thresholdsRef:string}
 export const region=z.enum(['ap-south-1','eu-central-1']);
 export type Region=z.infer<typeof region>;
 export const healthState=z.enum(['Excellent','Good','Fair','Poor']);
@@ -46,4 +46,5 @@ export interface PolicyResult {payload:EgressPayload;trace:RedactionTrace}
 export interface PrivacyPolicyEngine {readonly allowListVersion:string;process(events:RawTelemetryEvent[],ctx:PolicyContext):PolicyResult}
 export interface LocalOutageQueue {enqueue(record:EgressAuditRecord):void;nextBatch(limit:number):EgressAuditRecord[];markAcked(payloadId:string,at:Date):void;depth():number;oldestAgeMs():number;sentIds():string[]}
 export interface RemediationAuditLog {entryId:string;incidentId:string;seq:number;tsUtc:string;step:'proposed'|'policy_checked'|'approved'|'rejected'|'executed_simulated'|'rolled_back';actor:{type:'system'|'human';id:string};policyResult?:{allowed:boolean;riskTier:'low'|'medium'|'high';blastRadius:number;rulesEvaluated:string[]};simulatedStateBefore?:Record<string,unknown>;simulatedStateAfter?:Record<string,unknown>;prevHash:string;hash:string}
+
 

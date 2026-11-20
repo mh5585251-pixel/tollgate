@@ -1,0 +1,24 @@
+import {canonicalJson,hmac,safeEqual,tenants} from '../../../packages/shared/src/index';
+import {HttpError,Stores,type Session} from './store';
+const sessionKey=process.env.SESSION_KEY??'tollgate-local-demo-session';
+const globalStore=globalThis as typeof globalThis&{__tollgateStores?:Stores};
+export function stores(){return globalStore.__tollgateStores??=new Stores();}
+export function sessionCookie(session:Session){const encoded=Buffer.from(canonicalJson(session)).toString('base64url');return encoded+'.'+hmac(sessionKey,encoded);}
+export function session(req:Request):Session{const cookie=(req.headers.get('cookie')??'').split(';').map(s=>s.trim()).find(s=>s.startsWith('tg_session='))?.slice(11);if(!cookie)throw new HttpError(401,'tenant_session_required');const [encoded,sig]=cookie.split('.');if(!sig||!safeEqual(sig,hmac(sessionKey,encoded)))throw new HttpError(401,'invalid_session');const s=JSON.parse(Buffer.from(encoded,'base64url').toString()) as Session;if(!tenants.some(t=>t.tenantId===s.tenantId)||!['operator','viewer'].includes(s.role))throw new HttpError(401,'invalid_session');return s;}
+export async function api(req:Request):Promise<Response>{try{const url=new URL(req.url),path=url.pathname.split('/').filter(Boolean).slice(1);const method=req.method;
+ if(path[0]==='ready')return Response.json({ready:true});
+ if(path[0]==='session'&&method==='POST'){const b=await req.json();if(!tenants.some(t=>t.tenantId===b.tenantId)||!['operator','viewer'].includes(b.role))throw new HttpError(400,'invalid_demo_session');return Response.json({tenantId:b.tenantId,role:b.role},{headers:{'set-cookie':`tg_session=${sessionCookie(b)}; HttpOnly; SameSite=Strict; Path=/`}});}
+ if(['ingest','heartbeat'].includes(path[0])&&method==='POST'){const bytes=await req.text();if(bytes.length>500000)throw new HttpError(413,'payload_too_large');const store=stores().forCollector(req.headers.get('x-collector-id'),path[1]);store.authenticate(req.headers,bytes,path[1]);let body;try{body=JSON.parse(bytes);}catch{throw new HttpError(400,'invalid_json');}if(path[0]==='ingest'){const ack=store.ingest(body,bytes);return Response.json(ack);}store.heartbeat(body);const history=store.state<string[]>('heartbeatHistory',[]);history.push(new Date().toISOString());store.setState('heartbeatHistory',history.slice(-500));return Response.json({status:'accepted'});}
+ const s=session(req),store=stores().forSession(s);
+ if(path[0]==='fleet')return Response.json(store.fleet());
+ if(path[0]==='health-history')return Response.json(store.history());
+ if(path[0]==='incidents'){const items=store.incidents();if(path[1]){const item=items.find(i=>i.incidentId===path[1]);if(!item)throw new HttpError(404,'incident_not_found');return Response.json(item);}return Response.json(items);}
+ if(path[0]==='alerts')return Response.json(store.alerts());
+ if(path[0]==='metadata')return Response.json({payloads:store.payloads().map(r=>({payloadId:r.payload_id,seq:r.seq,capturedAtUtc:r.captured_at_utc,receivedAtUtc:r.received_at_utc,sha256:r.sha256,lateBeyondWatermark:Boolean(r.late_beyond_watermark)})),buckets:store.buckets()});
+ if(path[0]==='ingest-ids')return Response.json({ids:store.ids(url.searchParams.get('collectorId')??'')});
+ if(path[0]==='metrics'&&path[1]==='render-beacon'&&method==='POST'){const b=await req.json();store.beacon(b.payloadId,b.renderedAtUtc);return Response.json({status:'recorded'});}
+ if(path[0]==='slo')return Response.json(store.slo());
+ if(path[0]==='audit'&&path[1]==='dump'){if(process.env.AUDIT_MODE!=='1')throw new HttpError(404,'audit_disabled');return new Response(store.dump(),{headers:{'content-type':'text/plain'}});}
+ if(path[0]==='stream'){if(url.searchParams.has('tenant')&&url.searchParams.get('tenant')!==s.tenantId)throw new HttpError(403,'tenant_mismatch');let timer:ReturnType<typeof setInterval>;let closed=false;const stream=new ReadableStream({start(controller){const send=()=>{if(closed)return;try{for(const [event,data]of [['metric',store.latestPayload()?.metrics??[]],['health',store.fleet()],['incident',store.incidents()],['collector',store.fleet()]])controller.enqueue(new TextEncoder().encode(`event: ${event}\ndata: ${JSON.stringify(data)}\n\n`));}catch{closed=true;clearInterval(timer);}};send();timer=setInterval(send,1000);req.signal.addEventListener('abort',()=>{closed=true;clearInterval(timer);try{controller.close();}catch{/* already closed */}});},cancel(){closed=true;clearInterval(timer);}});return new Response(stream,{headers:{'content-type':'text/event-stream','cache-control':'no-cache','connection':'keep-alive'}});}
+ throw new HttpError(404,'not_found');
+ }catch(e){return Response.json({error:e instanceof HttpError?e.message:'request_failed'},{status:e instanceof HttpError?e.status:400});}}
