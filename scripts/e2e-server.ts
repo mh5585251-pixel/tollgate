@@ -1,0 +1,2 @@
+import {mkdirSync} from 'node:fs';import {join} from 'node:path';import {root} from '../packages/shared/src/index';import {Live} from './live';
+mkdirSync(join(root,'work'),{recursive:true});const live=new Live();for(const signal of ['SIGINT','SIGTERM'] as const)process.on(signal,()=>{live.stop();process.exit(0);});process.on('exit',()=>live.stop());await live.start();console.log('Isolated E2E services ready.');setInterval(()=>{},1000);

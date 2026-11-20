@@ -1,0 +1,2 @@
+import {it,expect} from 'vitest';import {ESLint} from 'eslint';
+it('lint rejects cross-tier imports and unseeded randomness',async()=>{const eslint=new ESLint();for(const [file,code]of [['apps/saas/lib/forbidden.ts','import x from "../../collector/src/runtime"; void x;'],['apps/saas/lib/forbidden.ts','import x from "../../../packages/sim/src/index"; void x;'],['packages/shared/src/forbidden.ts','export const n = Math.random();']]){const result=await eslint.lintText(code,{filePath:file});expect(result[0].messages.some(m=>m.ruleId?.startsWith('no-restricted'))).toBe(true);}});

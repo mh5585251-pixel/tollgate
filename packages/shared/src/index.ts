@@ -23,7 +23,7 @@ export type EgressPayload=z.infer<typeof egressSchema>;
 export type Signal=z.infer<typeof signalSchema>;
 export type Metric=z.infer<typeof metricSchema>;
 export interface RawTelemetryEvent {eventId:string;kind:'metric'|'syslog'|'auth'|'flow'|'snmp'|'app';observedAt:string;sourceTz:string;source:{host:string;ip?:string;deviceType:string};rawLine?:string;fields:Record<string,string|number|boolean>;tags:{planted?:'secret'|'canary'|'pii'}}
-export interface RedactionTrace {perEvent:Array<{eventId:string;rawLine?:string;redactions:Array<{ruleId:string;span:[number,number]}>;keptPaths:string[];droppedPaths:Array<{path:string;reason:'not_allowlisted'|'secret'|'pii'|'free_text'}>}>}
+export interface RedactionTrace {perEvent:Array<{eventId:string;sourceId:string;rawLine?:string;redactions:Array<{ruleId:string;span:[number,number]}>;keptPaths:string[];droppedPaths:Array<{path:string;reason:'not_allowlisted'|'secret'|'pii'|'free_text'}>}>}
 export function canonicalJson(v:unknown):string {
   if(v===null||typeof v!=='object')return JSON.stringify(v);
   if(Array.isArray(v))return `[${v.map(canonicalJson).join(',')}]`;
