@@ -491,3 +491,92 @@ FOUNDATION CHECKS PASSED; milestone verification scope expands as implemented.
 
 exit=0
 ```
+
+## M5 — 2026-11-20T11:06:22.142Z
+
+### npm run typecheck
+
+```text
+
+> tollgate@0.1.0 typecheck
+> tsc --noEmit
+
+
+exit=0
+```
+
+### npm run lint
+
+```text
+
+> tollgate@0.1.0 lint
+> eslint .
+
+
+exit=0
+```
+
+### npm run test
+
+```text
+
+> tollgate@0.1.0 test
+> vitest run
+
+
+ RUN  v3.2.7 C:/Users/mh558/Documents/Codex/2026-11-20/files-mentioned-by-the-user-agents/outputs/tollgate
+
+ ✓ tests/aiops.test.ts (3 tests) 443ms
+   ✓ reproduces incidents across two seeded end-to-end pipeline runs  402ms
+ ✓ tests/saas.test.ts (5 tests) 145ms
+ ✓ tests/collector.test.ts (5 tests) 72ms
+ ✓ tests/shared.test.ts (4 tests) 16ms
+ ✓ tests/sim.test.ts (3 tests) 10ms
+
+ Test Files  5 passed (5)
+      Tests  20 passed (20)
+   Start at  16:36:33
+   Duration  3.27s (transform 141ms, setup 0ms, collect 1.06s, tests 685ms, environment 1ms, prepare 700ms)
+
+
+exit=0
+```
+
+### npm run verify:all
+
+```text
+
+> tollgate@0.1.0 verify:all
+> tsx scripts/verify-all.ts
+
+
+> tollgate@0.1.0 typecheck
+> tsc --noEmit
+
+
+> tollgate@0.1.0 lint
+> eslint .
+
+
+> tollgate@0.1.0 test
+> vitest run
+
+
+ RUN  v3.2.7 C:/Users/mh558/Documents/Codex/2026-11-20/files-mentioned-by-the-user-agents/outputs/tollgate
+
+ ✓ tests/aiops.test.ts (3 tests) 425ms
+   ✓ reproduces incidents across two seeded end-to-end pipeline runs  381ms
+ ✓ tests/saas.test.ts (5 tests) 138ms
+ ✓ tests/collector.test.ts (5 tests) 71ms
+ ✓ tests/shared.test.ts (4 tests) 14ms
+ ✓ tests/sim.test.ts (3 tests) 10ms
+
+ Test Files  5 passed (5)
+      Tests  20 passed (20)
+   Start at  16:36:42
+   Duration  2.95s (transform 141ms, setup 0ms, collect 988ms, tests 658ms, environment 1ms, prepare 519ms)
+
+FOUNDATION CHECKS PASSED; milestone verification scope expands as implemented.
+
+exit=0
+```

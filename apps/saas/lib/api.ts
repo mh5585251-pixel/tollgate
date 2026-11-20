@@ -1,5 +1,7 @@
 import {canonicalJson,hmac,safeEqual,tenants} from '../../../packages/shared/src/index';
 import {HttpError,Stores,type Session} from './store';
+import {analyze} from './aiops';
+import {remediate,auditValid} from './remediation';
 const sessionKey=process.env.SESSION_KEY??'tollgate-local-demo-session';
 const globalStore=globalThis as typeof globalThis&{__tollgateStores?:Stores};
 export function stores(){return globalStore.__tollgateStores??=new Stores();}
@@ -8,8 +10,9 @@ export function session(req:Request):Session{const cookie=(req.headers.get('cook
 export async function api(req:Request):Promise<Response>{try{const url=new URL(req.url),path=url.pathname.split('/').filter(Boolean).slice(1);const method=req.method;
  if(path[0]==='ready')return Response.json({ready:true});
  if(path[0]==='session'&&method==='POST'){const b=await req.json();if(!tenants.some(t=>t.tenantId===b.tenantId)||!['operator','viewer'].includes(b.role))throw new HttpError(400,'invalid_demo_session');return Response.json({tenantId:b.tenantId,role:b.role},{headers:{'set-cookie':`tg_session=${sessionCookie(b)}; HttpOnly; SameSite=Strict; Path=/`}});}
- if(['ingest','heartbeat'].includes(path[0])&&method==='POST'){const bytes=await req.text();if(bytes.length>500000)throw new HttpError(413,'payload_too_large');const store=stores().forCollector(req.headers.get('x-collector-id'),path[1]);store.authenticate(req.headers,bytes,path[1]);let body;try{body=JSON.parse(bytes);}catch{throw new HttpError(400,'invalid_json');}if(path[0]==='ingest'){const ack=store.ingest(body,bytes);return Response.json(ack);}store.heartbeat(body);const history=store.state<string[]>('heartbeatHistory',[]);history.push(new Date().toISOString());store.setState('heartbeatHistory',history.slice(-500));return Response.json({status:'accepted'});}
+ if(['ingest','heartbeat'].includes(path[0])&&method==='POST'){const bytes=await req.text();if(bytes.length>500000)throw new HttpError(413,'payload_too_large');const store=stores().forCollector(req.headers.get('x-collector-id'),path[1]);store.authenticate(req.headers,bytes,path[1]);let body;try{body=JSON.parse(bytes);}catch{throw new HttpError(400,'invalid_json');}if(path[0]==='ingest'){const ack=store.ingest(body,bytes);if(ack.status==='accepted')analyze(store);return Response.json(ack);}store.heartbeat(body);const history=store.state<string[]>('heartbeatHistory',[]);history.push(new Date().toISOString());store.setState('heartbeatHistory',history.slice(-500));return Response.json({status:'accepted'});}
  const s=session(req),store=stores().forSession(s);
+ if(path[0]==='remediation'){const id=path[1];if(!store.incidents().some(i=>i.incidentId===id))throw new HttpError(404,'incident_not_found');if(method==='GET'){const rows=store.audit(id);return Response.json({rows,chainValid:auditValid(rows),simulatedState:store.simulated(id)});}const action=path[2];if(!['propose','approve','reject','rollback'].includes(action))throw new HttpError(400,'unknown_action');const b=await req.json().catch(()=>({}));return Response.json({rows:remediate(store,id,action as 'propose'|'approve'|'reject'|'rollback',s,b.actionId)});}
  if(path[0]==='fleet')return Response.json(store.fleet());
  if(path[0]==='health-history')return Response.json(store.history());
  if(path[0]==='incidents'){const items=store.incidents();if(path[1]){const item=items.find(i=>i.incidentId===path[1]);if(!item)throw new HttpError(404,'incident_not_found');return Response.json(item);}return Response.json(items);}
