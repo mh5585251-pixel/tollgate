@@ -192,3 +192,102 @@ FOUNDATION CHECKS PASSED; milestone verification scope expands as implemented.
 
 exit=0
 ```
+
+## M3 — 2026-11-20T10:59:09.839Z
+
+### npm run typecheck
+
+```text
+
+> tollgate@0.1.0 typecheck
+> tsc --noEmit
+
+apps/collector/src/privacy.ts(11,703): error TS2739: Type '{ score: number; value: number; baseline: number; }' is missing the following properties from type 'Record<"value" | "count" | "windowSec" | "score" | "baseline", number>': count, windowSec
+apps/collector/src/privacy.ts(13,388): error TS2739: Type '{ count: number; windowSec: number; }' is missing the following properties from type 'Record<"value" | "count" | "windowSec" | "score" | "baseline", number>': value, score, baseline
+apps/collector/src/privacy.ts(14,100): error TS2739: Type '{ count: number; }' is missing the following properties from type 'Record<"value" | "count" | "windowSec" | "score" | "baseline", number>': value, windowSec, score, baseline
+
+exit=2
+```
+
+## M3 — 2026-11-20T10:59:20.854Z
+
+### npm run typecheck
+
+```text
+
+> tollgate@0.1.0 typecheck
+> tsc --noEmit
+
+
+exit=0
+```
+
+### npm run lint
+
+```text
+
+> tollgate@0.1.0 lint
+> eslint .
+
+
+exit=0
+```
+
+### npm run test
+
+```text
+
+> tollgate@0.1.0 test
+> vitest run
+
+
+ RUN  v3.2.7 C:/Users/mh558/Documents/Codex/2026-11-20/files-mentioned-by-the-user-agents/outputs/tollgate
+
+ ✓ tests/collector.test.ts (5 tests) 73ms
+ ✓ tests/shared.test.ts (4 tests) 16ms
+ ✓ tests/sim.test.ts (3 tests) 10ms
+
+ Test Files  3 passed (3)
+      Tests  12 passed (12)
+   Start at  16:29:26
+   Duration  1.60s (transform 102ms, setup 0ms, collect 667ms, tests 99ms, environment 1ms, prepare 336ms)
+
+
+exit=0
+```
+
+### npm run verify:all
+
+```text
+
+> tollgate@0.1.0 verify:all
+> tsx scripts/verify-all.ts
+
+
+> tollgate@0.1.0 typecheck
+> tsc --noEmit
+
+
+> tollgate@0.1.0 lint
+> eslint .
+
+
+> tollgate@0.1.0 test
+> vitest run
+
+
+ RUN  v3.2.7 C:/Users/mh558/Documents/Codex/2026-11-20/files-mentioned-by-the-user-agents/outputs/tollgate
+
+ ✓ tests/collector.test.ts (5 tests) 71ms
+ ✓ tests/shared.test.ts (4 tests) 15ms
+ ✓ tests/sim.test.ts (3 tests) 11ms
+
+ Test Files  3 passed (3)
+      Tests  12 passed (12)
+   Start at  16:29:33
+   Duration  1.56s (transform 100ms, setup 0ms, collect 632ms, tests 98ms, environment 0ms, prepare 337ms)
+
+FOUNDATION CHECKS PASSED; milestone verification scope expands as implemented.
+
+exit=0
+```
