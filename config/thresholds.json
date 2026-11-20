@@ -1,0 +1,1 @@
+{"warmup":30,"alpha":0.2,"raise":3.5,"clear":2,"consecutive":3,"staleMs":20000,"offlineMs":45000,"recoveryMs":60000,"windowMs":60000,"watermarkMs":600000,"bucketMs":10000,"floor":{"cpu_pct":1,"mem_pct":1,"disk_pct":1,"bw_mbps":1,"latency_ms":2,"loss_pct":0.05,"conn_up":0.1}}

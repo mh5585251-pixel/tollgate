@@ -1,0 +1,5 @@
+import {describe,it,expect} from 'vitest';
+import {canonicalJson,pseudonymize,deterministicUuid,egressSchema} from '../packages/shared/src/index';
+import {payload} from './fixture';
+it('rejects nested unknown keys and free text at every boundary',()=>{const p=payload();expect(egressSchema.safeParse(p).success).toBe(true);for(const bad of [{...p,message:'raw'},{...p,collector:{...p.collector,url:'http://raw'}},{...p,signals:[{code:'AUTH_FAIL_BURST',category:'security',severity:'medium',sourceId:'abcdef123456',params:{username:7},tsUtc:p.capturedAtUtc}]}])expect(egressSchema.safeParse(bad).success).toBe(false);});
+describe('foundations',()=>{it('canonicalizes nested keys',()=>expect(canonicalJson({z:1,a:{y:2,b:3}})).toBe('{"a":{"b":3,"y":2},"z":1}'));it('pseudonyms are tenant salted',()=>{expect(pseudonymize('a','host')).toMatch(/^[a-f0-9]{12}$/);expect(pseudonymize('a','host')).not.toBe(pseudonymize('b','host'));});it('stable uuid v4 and fail closed schema',()=>{expect(deterministicUuid('one')).toMatch(/^[a-f0-9-]{14}4/);expect(egressSchema.safeParse({message:'raw'}).success).toBe(false);});});
