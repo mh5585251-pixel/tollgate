@@ -1,0 +1,1 @@
+{"fields":{"eventId":"id","kind":"type","observedAt":"time","sourceTz":"tz","host":"device.name","ip":"device.address","deviceType":"device.type","rawLine":"log"},"metrics":{"cpu_pct":"sample.cpu","latency_ms":"sample.latency"}}

@@ -1,0 +1,2 @@
+{"id":"fixture-1","type":"metric","time":"2026-11-20T00:00:00.000Z","tz":"UTC","device":{"name":"sample-host","address":"192.0.2.10","type":"server"},"sample":{"cpu":35,"latency":40}}
+{"id":"fixture-2","type":"syslog","time":"2026-11-20T00:00:01.000Z","tz":"UTC","device":{"name":"sample-host","type":"server"},"sample":{"cpu":36,"latency":41},"log":"fixture only: email=sample@example.test"}

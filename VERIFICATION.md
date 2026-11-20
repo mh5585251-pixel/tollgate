@@ -85,3 +85,110 @@ FOUNDATION CHECKS PASSED; milestone verification scope expands as implemented.
 
 exit=0
 ```
+
+## M2 — 2026-11-20T10:55:15.410Z
+
+### npm run typecheck
+
+```text
+
+> tollgate@0.1.0 typecheck
+> tsc --noEmit
+
+packages/sim/src/index.ts(4,75): error TS2307: Cannot find module '@tollgate/shared' or its corresponding type declarations.
+tests/sim.test.ts(2,28): error TS2307: Cannot find module '@tollgate/shared' or its corresponding type declarations.
+tests/sim.test.ts(3,91): error TS2307: Cannot find module '@tollgate/sim' or its corresponding type declarations.
+npm notice
+npm notice New major version of npm available! 11.6.2 -> 12.2.3
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.3
+npm notice To update run: npm install -g npm@12.2.3
+npm notice
+
+exit=2
+```
+
+## M2 — 2026-11-20T10:56:41.246Z
+
+### npm run typecheck
+
+```text
+
+> tollgate@0.1.0 typecheck
+> tsc --noEmit
+
+npm notice
+npm notice New major version of npm available! 11.6.2 -> 12.2.3
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.3
+npm notice To update run: npm install -g npm@12.2.3
+npm notice
+
+exit=0
+```
+
+### npm run lint
+
+```text
+
+> tollgate@0.1.0 lint
+> eslint .
+
+
+exit=0
+```
+
+### npm run test
+
+```text
+
+> tollgate@0.1.0 test
+> vitest run
+
+
+ RUN  v3.2.7 C:/Users/mh558/Documents/Codex/2026-11-20/files-mentioned-by-the-user-agents/outputs/tollgate
+
+ ✓ tests/sim.test.ts (3 tests) 11ms
+ ✓ tests/shared.test.ts (4 tests) 15ms
+
+ Test Files  2 passed (2)
+      Tests  7 passed (7)
+   Start at  16:26:48
+   Duration  1.09s (transform 72ms, setup 0ms, collect 404ms, tests 27ms, environment 0ms, prepare 312ms)
+
+
+exit=0
+```
+
+### npm run verify:all
+
+```text
+
+> tollgate@0.1.0 verify:all
+> tsx scripts/verify-all.ts
+
+
+> tollgate@0.1.0 typecheck
+> tsc --noEmit
+
+
+> tollgate@0.1.0 lint
+> eslint .
+
+
+> tollgate@0.1.0 test
+> vitest run
+
+
+ RUN  v3.2.7 C:/Users/mh558/Documents/Codex/2026-11-20/files-mentioned-by-the-user-agents/outputs/tollgate
+
+ ✓ tests/shared.test.ts (4 tests) 15ms
+ ✓ tests/sim.test.ts (3 tests) 11ms
+
+ Test Files  2 passed (2)
+      Tests  7 passed (7)
+   Start at  16:26:54
+   Duration  927ms (transform 59ms, setup 0ms, collect 358ms, tests 25ms, environment 0ms, prepare 221ms)
+
+FOUNDATION CHECKS PASSED; milestone verification scope expands as implemented.
+
+exit=0
+```

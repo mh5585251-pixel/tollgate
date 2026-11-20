@@ -5,3 +5,4 @@
 - Demo keys and salts in config are local development credentials, not production secrets. No runtime external services are required.
 - Organizer format unknown. Mapping and a clearly labeled sample fixture will be supplied; no organizer schema is assumed.
 - During M1–M7 verify:all runs all checks implemented by that milestone. M8 expands it to the entire definition of done. Partial gates never imply final completion.
+- This execution sandbox rejects npm workspace symlinks (EPERM). Verification installation uses `npm install --workspaces=false`; workspace source imports use explicit relative paths. Workspaces remain declared and normal npm installation outside this sandbox is unchanged. No elevated privileges are required for the workaround.

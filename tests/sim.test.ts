@@ -1,0 +1,6 @@
+import {it,expect} from 'vitest';
+import {tenants,root} from '../packages/shared/src/index';
+import {generate,inject,scenarioIds,plantedValues,OrganizerStreamAdapter,mulberry32} from '../packages/sim/src/index';
+it('reproduces telemetry byte for byte for both tenants',()=>{for(const t of tenants){expect(generate(t,17,'2026-11-20T00:00:00.000Z',1337)).toEqual(generate(t,17,'2026-11-20T00:00:00.000Z',1337));expect(generate(t,17,'2026-11-20T00:00:00.000Z',1337)).not.toEqual(generate(t,17,'2026-11-20T00:00:00.000Z',99));}const a=mulberry32(1337),b=mulberry32(1337);expect(Array.from({length:50},a)).toEqual(Array.from({length:50},b));});
+it('defines all scenario injections and at least twelve planted strings',()=>{for(const id of scenarioIds)expect(inject(id,tenants[0],'fixed','2026-11-20T00:00:00.000Z').length).toBeGreaterThan(0);expect(plantedValues('fixed')).toHaveLength(12);expect(inject('failed_logins',tenants[0],'fixed','2026-11-20T00:00:00.000Z')).toHaveLength(8);});
+it('maps a documented JSONL fixture without inferring fields',async()=>{const events=[];for await(const e of new OrganizerStreamAdapter().file(`${root}/packages/sim/fixtures/sample.jsonl`))events.push(e);expect(events).toHaveLength(2);expect(events[0].fields.cpu_pct).toBe(35);expect(()=>new OrganizerStreamAdapter().normalize({surprise:true})).toThrow('host field');});
