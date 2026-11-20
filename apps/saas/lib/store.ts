@@ -4,7 +4,7 @@ import {canonicalJson,contentHash,egressSchema,hmac,root,safeEqual,sha256,signat
 import {guard} from '../../../packages/shared/src/guard';
 export class HttpError extends Error {constructor(readonly status:number,message:string){super(message);}}
 export interface Session {tenantId:string;role:'operator'|'viewer'}
-export type Alert={alertId:string;tenantId:string;collectorId:string;payloadId:string;sourceId:string;code:string;metric:string;category:string;severity:string;score:number;value:number;tsUtc:string;createdAtUtc:string;injectedAtUtc?:string};
+export type Alert={alertId:string;tenantId:string;collectorId:string;payloadId:string;sourceId:string;code:string;metric:string;category:string;severity:string;score:number;value:number;tsUtc:string;createdAtUtc:string;injectedAtUtc?:string;contributions?:Array<{signal:string;weight:number;evidence:string[]}>};
 export class TenantStore {
  private db:Database.Database;
  constructor(readonly tenant:Tenant,path:string){this.db=new Database(path);this.db.pragma('journal_mode = WAL');this.db.exec(`CREATE TABLE IF NOT EXISTS payloads(tenant_id TEXT,payload_id TEXT,collector_id TEXT,seq INTEGER,captured_at_utc TEXT,received_at_utc TEXT,body TEXT,sha256 TEXT,late_beyond_watermark INTEGER,PRIMARY KEY(tenant_id,payload_id),UNIQUE(tenant_id,collector_id,seq));CREATE TABLE IF NOT EXISTS nonces(tenant_id TEXT,nonce TEXT,at INTEGER,PRIMARY KEY(tenant_id,nonce));CREATE TABLE IF NOT EXISTS collectors(tenant_id TEXT,collector_id TEXT,last_seen TEXT,last_payload TEXT,heartbeat TEXT,chain_broken INTEGER DEFAULT 0,PRIMARY KEY(tenant_id,collector_id));CREATE TABLE IF NOT EXISTS health_events(id INTEGER PRIMARY KEY,tenant_id TEXT,collector_id TEXT,at TEXT,state TEXT,reasons TEXT);CREATE TABLE IF NOT EXISTS render_beacons(tenant_id TEXT,payload_id TEXT,rendered_at TEXT,PRIMARY KEY(tenant_id,payload_id));CREATE TABLE IF NOT EXISTS duplicates(tenant_id TEXT,payload_id TEXT,at TEXT);CREATE TABLE IF NOT EXISTS alerts(tenant_id TEXT,id TEXT,record TEXT,PRIMARY KEY(tenant_id,id));CREATE TABLE IF NOT EXISTS incidents(tenant_id TEXT,id TEXT,record TEXT,PRIMARY KEY(tenant_id,id));CREATE TABLE IF NOT EXISTS remediation(tenant_id TEXT,id TEXT,incident_id TEXT,seq INTEGER,record TEXT,PRIMARY KEY(tenant_id,id));CREATE TABLE IF NOT EXISTS simulated_state(tenant_id TEXT,id TEXT,state TEXT,PRIMARY KEY(tenant_id,id));CREATE TABLE IF NOT EXISTS engine_state(tenant_id TEXT,key TEXT,value TEXT,PRIMARY KEY(tenant_id,key));`);}
@@ -43,11 +43,11 @@ export class TenantStore {
  close(){this.db.close();}
 }
 export class Stores {
- private scoped=new Map<string,TenantStore>();
- constructor(readonly dataDir=process.env.DATA_DIR??join(root,'data')){mkdirSync(dataDir,{recursive:true});for(const tenant of tenants)this.scoped.set(tenant.tenantId,new TenantStore(tenant,join(dataDir,`saas-${tenant.homeRegion}.sqlite`)));}
+ private scoped=new Map<string,TenantStore>();private watchdog:ReturnType<typeof setInterval>;
+ constructor(readonly dataDir=process.env.DATA_DIR??join(root,'data')){mkdirSync(dataDir,{recursive:true});for(const tenant of tenants)this.scoped.set(tenant.tenantId,new TenantStore(tenant,join(dataDir,`saas-${tenant.homeRegion}.sqlite`)));this.watchdog=setInterval(()=>{for(const store of this.scoped.values())store.fleet();},1000);this.watchdog.unref();}
  forSession(session:Session){const store=this.scoped.get(session.tenantId);if(!store)throw new HttpError(401,'invalid_tenant_session');return store;}
  forCollector(id:string|null,region:Region|string){const tenant=tenants.find(t=>t.collectorId===id);if(!tenant)throw new HttpError(401,'unknown_collector');if(tenant.homeRegion!==region)throw new HttpError(421,'region_mismatch');return this.forSession({tenantId:tenant.tenantId,role:'viewer'});}
- close(){for(const s of this.scoped.values())s.close();}
+ close(){clearInterval(this.watchdog);for(const s of this.scoped.values())s.close();}
 }
 
 

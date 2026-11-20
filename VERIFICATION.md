@@ -678,3 +678,194 @@ FOUNDATION CHECKS PASSED; milestone verification scope expands as implemented.
 
 exit=0
 ```
+
+## M7 — 2026-11-20T11:12:19.815Z
+
+### npm run typecheck
+
+```text
+
+> tollgate@0.1.0 typecheck
+> tsc --noEmit
+
+
+exit=0
+```
+
+### npm run lint
+
+```text
+
+> tollgate@0.1.0 lint
+> eslint .
+
+
+exit=0
+```
+
+### npm run test
+
+```text
+
+> tollgate@0.1.0 test
+> vitest run
+
+
+ RUN  v3.2.7 C:/Users/mh558/Documents/Codex/2026-11-20/files-mentioned-by-the-user-agents/outputs/tollgate
+
+ ✓ tests/aiops.test.ts (3 tests) 428ms
+   ✓ reproduces incidents across two seeded end-to-end pipeline runs  389ms
+ ✓ tests/console.test.ts (1 test) 372ms
+   ✓ serves the local console and enforces browser origins for fault changes  371ms
+ ✓ tests/saas.test.ts (5 tests) 137ms
+ ✓ tests/collector.test.ts (5 tests) 71ms
+ ✓ tests/shared.test.ts (4 tests) 15ms
+ ✓ tests/sim.test.ts (3 tests) 10ms
+
+ Test Files  6 passed (6)
+      Tests  21 passed (21)
+   Start at  16:42:27
+   Duration  3.97s (transform 179ms, setup 0ms, collect 1.37s, tests 1.03s, environment 1ms, prepare 637ms)
+
+
+exit=0
+```
+
+### npm run verify:all
+
+```text
+
+> tollgate@0.1.0 verify:all
+> tsx scripts/verify-all.ts
+
+
+> tollgate@0.1.0 typecheck
+> tsc --noEmit
+
+
+> tollgate@0.1.0 lint
+> eslint .
+
+
+> tollgate@0.1.0 test
+> vitest run
+
+
+ RUN  v3.2.7 C:/Users/mh558/Documents/Codex/2026-11-20/files-mentioned-by-the-user-agents/outputs/tollgate
+
+ ✓ tests/aiops.test.ts (3 tests) 406ms
+   ✓ reproduces incidents across two seeded end-to-end pipeline runs  368ms
+ ✓ tests/console.test.ts (1 test) 342ms
+   ✓ serves the local console and enforces browser origins for fault changes  341ms
+ ✓ tests/saas.test.ts (5 tests) 136ms
+ ✓ tests/collector.test.ts (5 tests) 70ms
+ ✓ tests/shared.test.ts (4 tests) 14ms
+ ✓ tests/sim.test.ts (3 tests) 10ms
+
+ Test Files  6 passed (6)
+      Tests  21 passed (21)
+   Start at  16:42:37
+   Duration  3.85s (transform 159ms, setup 0ms, collect 1.33s, tests 979ms, environment 1ms, prepare 618ms)
+
+FOUNDATION CHECKS PASSED; milestone verification scope expands as implemented.
+
+exit=0
+```
+
+## M7-final — 2026-11-20T11:15:54.302Z
+
+### npm run typecheck
+
+```text
+
+> tollgate@0.1.0 typecheck
+> tsc --noEmit
+
+npm notice
+npm notice New major version of npm available! 11.6.2 -> 12.2.3
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.3
+npm notice To update run: npm install -g npm@12.2.3
+npm notice
+
+exit=0
+```
+
+### npm run lint
+
+```text
+
+> tollgate@0.1.0 lint
+> eslint .
+
+
+exit=0
+```
+
+### npm run test
+
+```text
+
+> tollgate@0.1.0 test
+> vitest run
+
+
+ RUN  v3.2.7 C:/Users/mh558/Documents/Codex/2026-11-20/files-mentioned-by-the-user-agents/outputs/tollgate
+
+ ✓ tests/aiops.test.ts (3 tests) 488ms
+   ✓ reproduces incidents across two seeded end-to-end pipeline runs  447ms
+ ✓ tests/console.test.ts (1 test) 405ms
+   ✓ serves the local console and enforces browser origins for fault changes  404ms
+ ✓ tests/saas.test.ts (5 tests) 139ms
+ ✓ tests/collector.test.ts (5 tests) 79ms
+ ✓ tests/shared.test.ts (4 tests) 15ms
+ ✓ tests/sim.test.ts (3 tests) 14ms
+
+ Test Files  6 passed (6)
+      Tests  21 passed (21)
+   Start at  16:46:02
+   Duration  4.32s (transform 181ms, setup 0ms, collect 1.47s, tests 1.14s, environment 1ms, prepare 694ms)
+
+
+exit=0
+```
+
+### npm run verify:all
+
+```text
+
+> tollgate@0.1.0 verify:all
+> tsx scripts/verify-all.ts
+
+
+> tollgate@0.1.0 typecheck
+> tsc --noEmit
+
+
+> tollgate@0.1.0 lint
+> eslint .
+
+
+> tollgate@0.1.0 test
+> vitest run
+
+
+ RUN  v3.2.7 C:/Users/mh558/Documents/Codex/2026-11-20/files-mentioned-by-the-user-agents/outputs/tollgate
+
+ ✓ tests/aiops.test.ts (3 tests) 442ms
+   ✓ reproduces incidents across two seeded end-to-end pipeline runs  403ms
+ ✓ tests/console.test.ts (1 test) 380ms
+   ✓ serves the local console and enforces browser origins for fault changes  379ms
+ ✓ tests/saas.test.ts (5 tests) 138ms
+ ✓ tests/collector.test.ts (5 tests) 78ms
+ ✓ tests/shared.test.ts (4 tests) 15ms
+ ✓ tests/sim.test.ts (3 tests) 12ms
+
+ Test Files  6 passed (6)
+      Tests  21 passed (21)
+   Start at  16:46:13
+   Duration  4.18s (transform 162ms, setup 0ms, collect 1.43s, tests 1.06s, environment 1ms, prepare 677ms)
+
+FOUNDATION CHECKS PASSED; milestone verification scope expands as implemented.
+
+exit=0
+```

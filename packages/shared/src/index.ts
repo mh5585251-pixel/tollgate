@@ -1,8 +1,9 @@
 import {createHash,createHmac,timingSafeEqual} from 'node:crypto';
-import {readFileSync} from 'node:fs';
-import {fileURLToPath} from 'node:url';
+import {readFileSync,existsSync} from 'node:fs';
+import {dirname,join,resolve} from 'node:path';
 import {z} from 'zod';
-export const root=fileURLToPath(new URL('../../../',import.meta.url));
+function findRoot(){let dir=resolve(process.env.TOLLGATE_ROOT??process.cwd());while(!existsSync(join(dir,'config','tenants.json'))){const parent=dirname(dir);if(parent===dir)throw new Error('Run from the Tollgate checkout or set TOLLGATE_ROOT');dir=parent;}return dir;}
+export const root=findRoot();
 export function config<T=any>(name:string):T{return JSON.parse(readFileSync(`${root}/config/${name}.json`,'utf8')) as T;}
 export const thresholds=config('thresholds');
 export const tenants=config<Tenant[]>('tenants');
